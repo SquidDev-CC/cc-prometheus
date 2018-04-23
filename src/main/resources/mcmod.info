@@ -1,0 +1,16 @@
+[
+    {
+        "modid" : "cc-prometheus",
+        "name" : "CC Prometheus",
+        "version" : "${version}",
+        "mcversion" : "${mcversion}",
+        "url" : "https://github.com/SquidDev-CC/",
+        "authorList" : [
+            "SquidDev"
+        ],
+        "description" : "Hosts a Prometheus server with various ComputerCraft related statistics",
+        "parent" : "computercraft",
+        "screenshots": [
+        ]
+    }
+]
