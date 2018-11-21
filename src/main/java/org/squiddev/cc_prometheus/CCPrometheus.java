@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.squiddev.cc_prometheus.reporters.ComputerReporter;
+import org.squiddev.cc_prometheus.reporters.ManagementReporter;
 import org.squiddev.cc_prometheus.reporters.TrackingReporter;
 
 import java.io.File;
@@ -60,6 +61,7 @@ public class CCPrometheus {
 
         controller = new PrometheusController();
         controller.addReporter(new ComputerReporter());
+        controller.addReporter(new ManagementReporter());
 
         if (classExists("dan200.computercraft.core.tracking.Tracker")) {
             controller.addReporter(new TrackingReporter());
@@ -67,6 +69,12 @@ public class CCPrometheus {
 
         server = new Server(port);
         server.setHandler(controller);
+        server.setRequestLog((request, response) -> {
+            if (response.getStatus() != 200) {
+                log.error(String.format("Request to '%s' returned status %s: %s",
+                    request.getRequestURL(), response.getStatus(), response.getReason()));
+            }
+        });
 
         try {
             server.start();

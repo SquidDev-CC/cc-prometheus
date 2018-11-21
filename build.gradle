@@ -24,7 +24,7 @@ group = "org.squiddev"
 archivesBaseName = "cc-prometheus"
 
 minecraft {
-    version = "1.12.2-14.23.2.2634"
+    version = "1.12.2-14.23.4.2749"
     runDir = "run"
     replace '${version}', project.version
 
@@ -33,7 +33,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20180324"
+    mappings = "snapshot_20180724"
 }
 
 configurations {
@@ -47,8 +47,8 @@ repositories {
 }
 
 dependencies {
-    compile 'dan200.computercraft:ComputerCraft:1.80pr1-build5'
-    provided 'org.squiddev:cc-tweaked:1.80pr1.6'
+    // provided 'dan200.computercraft:ComputerCraft:1.80pr1-build5'
+    compile 'org.squiddev:cc-tweaked:1.80pr1.8'
 
     shadow 'io.prometheus:simpleclient_common:0.0.26'
     shadow 'org.eclipse.jetty:jetty-server:9.4.6.v20170531'

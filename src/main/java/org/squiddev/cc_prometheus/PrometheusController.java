@@ -35,8 +35,13 @@ public class PrometheusController extends AbstractHandler {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-
-        for (Reporter reporter : reporters) reporter.fetch();
+        for (Reporter reporter : reporters) {
+            try {
+                reporter.fetch();
+            } catch (RuntimeException e) {
+                CCPrometheus.log.error("Failed to update " + reporter.getClass().getName(), e);
+            }
+        }
 
         try {
             response.setStatus(HttpServletResponse.SC_OK);
