@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.squiddev.cc_prometheus.reporters.ComputerReporter;
 import org.squiddev.cc_prometheus.reporters.ManagementReporter;
+import org.squiddev.cc_prometheus.reporters.ThreadGroupReporter;
 import org.squiddev.cc_prometheus.reporters.TrackingReporter;
 
 import java.io.File;
@@ -65,6 +66,10 @@ public class CCPrometheus {
 
         if (classExists("dan200.computercraft.core.tracking.Tracker")) {
             controller.addReporter(new TrackingReporter());
+        }
+
+        if (classExists("dan200.computercraft.shared.util.ThreadUtils")) {
+            controller.addReporter(new ThreadGroupReporter());
         }
 
         server = new Server(port);

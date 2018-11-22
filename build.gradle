@@ -48,7 +48,7 @@ repositories {
 
 dependencies {
     // provided 'dan200.computercraft:ComputerCraft:1.80pr1-build5'
-    compile 'org.squiddev:cc-tweaked:1.80pr1.8'
+    compile 'org.squiddev:cc-tweaked:1.80pr1.11'
 
     shadow 'io.prometheus:simpleclient_common:0.0.26'
     shadow 'org.eclipse.jetty:jetty-server:9.4.6.v20170531'

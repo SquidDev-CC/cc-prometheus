@@ -42,14 +42,14 @@ public class ManagementReporter implements Reporter {
         .namespace(NAMESPACE)
         .name("management_gc_count")
         .help("Total number of GC iterations which have occurred")
-        .labelNames("Source")
+        .labelNames("source")
         .create();
 
     private final Gauge gcTime = Gauge.build()
         .namespace(NAMESPACE)
         .name("management_gc_time")
         .help("Time since last GC in ms")
-        .labelNames("Source")
+        .labelNames("source")
         .create();
 
     @Override
