@@ -13,7 +13,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.squiddev.cc_prometheus.reporters.ComputerReporter;
 import org.squiddev.cc_prometheus.reporters.ManagementReporter;
 import org.squiddev.cc_prometheus.reporters.ThreadGroupReporter;
@@ -39,6 +42,7 @@ public class CCPrometheus {
 
     private Config config;
     private int port;
+    private int maxThreads;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -72,7 +76,19 @@ public class CCPrometheus {
             controller.addReporter(new ThreadGroupReporter());
         }
 
-        server = new Server(port);
+        // Setup pool with a maximum number of threads and a friendlier name.
+        ThreadGroup group = new ThreadGroup(MOD_ID + " ThreadPool");
+        QueuedThreadPool pool = new QueuedThreadPool(maxThreads, 6, 60_000, null, group);
+        pool.setName(MOD_ID + " ThreadPool");
+
+        server = new Server(pool);
+
+        // Setup connector to listen on the specific port.
+        ServerConnector connector = new ServerConnector(server);
+        connector.setPort(port);
+        server.setConnectors(new Connector[]{connector});
+
+        // Register some handlers for logging and requests
         server.setHandler(controller);
         server.setRequestLog((request, response) -> {
             if (response.getStatus() != 200) {
@@ -125,6 +141,7 @@ public class CCPrometheus {
         private Configuration configuration;
 
         private Property port;
+        private Property maxThreads;
 
         Config(File file) {
             configuration = new Configuration(file);
@@ -134,18 +151,24 @@ public class CCPrometheus {
             port.setMinValue(0);
             port.setRequiresWorldRestart(true);
             port.setComment("The port on which to host the prometheus server");
+
+            maxThreads = configuration.get(Configuration.CATEGORY_GENERAL, "max_threads", 16);
+            maxThreads.setMinValue(6);
+            maxThreads.setRequiresWorldRestart(true);
+            maxThreads.setComment("The maximum number of threads for the server");
         }
 
         void sync() {
             configuration.save();
 
             CCPrometheus.this.port = port.getInt();
+            CCPrometheus.this.maxThreads = maxThreads.getInt();
         }
     }
 
     private static boolean classExists(String name) {
         try {
-            Class.forName("dan200.computercraft.core.tracking.Tracker", false, CCPrometheus.class.getClassLoader());
+            Class.forName(name, false, CCPrometheus.class.getClassLoader());
             return true;
         } catch (ClassNotFoundException ignored) {
             return false;
