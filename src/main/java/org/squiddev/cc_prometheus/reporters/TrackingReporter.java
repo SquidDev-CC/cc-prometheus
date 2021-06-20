@@ -20,7 +20,7 @@ public class TrackingReporter implements Reporter, Tracker {
             summaries.put(field, Summary.build()
                 .namespace(NAMESPACE)
                 .name(field.id())
-                .help(field.displayName())
+                .help(field.toString())
                 .labelNames("computer_id")
                 .create());
         }
