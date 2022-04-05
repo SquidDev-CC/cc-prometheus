@@ -1,0 +1,88 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+    }
+}
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+
+archivesBaseName = "cc-prometheus-forge-${minecraft_version}"
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+
+    runs {
+        all {
+            ideaModule "${rootProject.name}.${project.name}.main"
+
+            lazyToken('minecraft_classpath') {
+                configurations.shadow.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+            }
+
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                ccprometheus {
+                    source sourceSets.main
+                    source project(":common").sourceSets.main
+                }
+            }
+        }
+
+        client {
+            workingDirectory project.file('run')
+        }
+
+        server {
+            workingDirectory project.file('run/server')
+        }
+    }
+}
+
+configurations {
+    shadow
+    implementation.extendsFrom shadow
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    compileOnly project(":common")
+
+    shadow "io.prometheus:simpleclient:${prometheus_version}"
+    shadow "io.prometheus:simpleclient_httpserver:${prometheus_version}"
+    shadow "io.prometheus:simpleclient_hotspot:${prometheus_version}"
+
+    implementation fg.deobf("org.squiddev:cc-tweaked-${minecraft_version}:${cct_version}")
+}
+
+shadowJar {
+    relocate 'io.prometheus', 'cc.tweaked.prometheus.shadow.prometheus'
+    configurations = [project.configurations.shadow]
+    minimize()
+    exclude("META-INF/**")
+}
+
+reobf {
+    shadowJar {}
+}
+
+shadowJar.finalizedBy('reobfJar')
+
+tasks.withType(JavaCompile) {
+    source(project(":common").sourceSets.main.allSource)
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+}

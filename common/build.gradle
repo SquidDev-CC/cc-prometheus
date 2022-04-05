@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+    id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
+    id 'maven-publish'
+}
+
+archivesBaseName = "cc-prometheus-common-${minecraft_version}"
+
+minecraft {
+    version(minecraft_version)
+}
+
+dependencies {
+    compileOnly "io.prometheus:simpleclient:${prometheus_version}"
+    compileOnly "io.prometheus:simpleclient_httpserver:${prometheus_version}"
+    compileOnly "io.prometheus:simpleclient_hotspot:${prometheus_version}"
+
+    compileOnly "org.squiddev:cc-tweaked-${minecraft_version}:${cct_version}"
+
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+}

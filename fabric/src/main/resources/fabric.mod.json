@@ -1,0 +1,28 @@
+{
+    "schemaVersion": 1,
+    "id": "ccprometheus",
+    "version": "${version}",
+    "name": "CC Prometheus Exporter",
+    "description": "Hosts a Prometheus server with various ComputerCraft related statistics",
+    "authors": [
+        "SquidDev"
+    ],
+    "contact": {
+        "homepage": "https://github.com/cc-tweaked/cc-prometheus",
+        "sources": "https://github.com/cc-tweaked/cc-prometheus"
+    },
+    "license": "BSD-3-Clause",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "cc.tweaked.prometheus.FabricMod"
+        ]
+    },
+    "depends": {
+        "fabricloader": ">=0.13",
+        "fabric": "*",
+        "minecraft": "1.18.x",
+        "java": ">=17",
+        "computercraft": "*"
+    }
+}
