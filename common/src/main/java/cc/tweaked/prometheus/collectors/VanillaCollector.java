@@ -51,8 +51,8 @@ public class VanillaCollector {
             totalPlayerCount.set(server.getPlayerCount());
 
             // TODO: This doesn't include the time to run Forge/Fabric hooks! Not sure how to handle that in a generic way.
-            averageTickTime.set(server.getAverageTickTime() * 1e-9);
-            tickTime.observe(server.tickTimes[server.getTickCount() % 100] * 1e-9);
+            averageTickTime.set(server.getAverageTickTime() * 1e-3); // ms to s
+            tickTime.observe(server.tickTimes[server.getTickCount() % 100] * 1e-9); // ns to s.
         });
     }
 }
