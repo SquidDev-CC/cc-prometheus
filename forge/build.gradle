@@ -70,7 +70,7 @@ shadowJar {
     relocate 'io.prometheus', 'cc.tweaked.prometheus.shadow.prometheus'
     configurations = [project.configurations.shadow]
     minimize()
-    exclude("META-INF/**")
+    exclude("META-INF/maven/**")
 }
 
 reobf {

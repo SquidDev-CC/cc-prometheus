@@ -4,8 +4,10 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import dan200.computercraft.fabric.mixin.LevelResourceAccess;
 import dan200.computercraft.shared.util.CommentedConfigSpec;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 
@@ -37,7 +39,13 @@ public class FabricMod implements ModInitializer {
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> ServerMetrics.onServerStart(server, config));
+        // Need to run after CC:R has reset the tracker. Some additional ugliness due to
+        // https://github.com/QuiltMC/quilted-fabric-api/issues/12
+        var phase = new ResourceLocation(Constants.MOD_ID, "after_cc");
+        ServerLifecycleEvents.SERVER_STARTED.addPhaseOrdering(Event.DEFAULT_PHASE, phase);
+        ServerLifecycleEvents.SERVER_STARTED.addPhaseOrdering(new ResourceLocation("quilt", "default"), phase);
+        ServerLifecycleEvents.SERVER_STARTED.register(phase, server -> ServerMetrics.onServerStart(server, config));
+
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> ServerMetrics.onServerStop());
         ServerTickEvents.END_SERVER_TICK.register(server -> ServerMetrics.onServerTick());
     }
