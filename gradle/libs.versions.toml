@@ -1,0 +1,63 @@
+[versions]
+
+# Minecraft
+# MC version is specified in gradle.properties, as we need that in settings.gradle.
+fabric-api = "0.66.0+1.19.2"
+fabric-loader = "0.14.10"
+forge = "43.1.1"
+parchment = "2022.10.16"
+parchmentMc = "1.19.2"
+
+# Normal dependencies
+jsr305 = "3.0.2"
+nightConfig = "3.6.5"
+prometheus = "0.16.0"
+
+# Minecraft mods
+forgeConfig = "4.2.6"
+cct = "1.102.0-SNAPSHOT"
+
+# Build tools
+fabric-loom = "1.0-SNAPSHOT"
+forgeGradle = "5.1.+"
+librarian = "1.+"
+vanillaGradle = "0.2.1-SNAPSHOT"
+shadow = "7.1.2"
+
+[libraries]
+# Normal dependencies
+jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
+nightConfig-core = { module = "com.electronwill.night-config:core", version.ref = "nightConfig" }
+nightConfig-toml = { module = "com.electronwill.night-config:toml", version.ref = "nightConfig" }
+
+prometheus-core = { module = "io.prometheus:simpleclient", version.ref = "prometheus" }
+prometheus-server = { module = "io.prometheus:simpleclient_httpserver", version.ref = "prometheus" }
+prometheus-hotspot = { module = "io.prometheus:simpleclient_hotspot", version.ref = "prometheus" }
+# All the transitive deps of prometheus.
+prometheus-tracerCommon = { module = "io.prometheus:simpleclient_tracer_common", version.ref = "prometheus" }
+prometheus-tracerOtel = { module = "io.prometheus:simpleclient_tracer_otel", version.ref = "prometheus" }
+prometheus-tracerOtelAgent = { module = "io.prometheus:simpleclient_tracer_otel_agent", version.ref = "prometheus" }
+
+# Minecraft mods
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+forgeConfig = { module = "net.minecraftforge:forgeconfigapiport-fabric", version.ref = "forgeConfig" }
+cct-forge = { module = "cc.tweaked:cc-tweaked-1.19.2-forge", version.ref = "cct" }
+cct-fabric = { module = "cc.tweaked:cc-tweaked-1.19.2-fabric", version.ref = "cct" }
+
+[plugins]
+forgeGradle = { id = "net.minecraftforge.gradle", version.ref = "forgeGradle" }
+fabric-loom = { id = "fabric-loom", version.ref = "fabric-loom" }
+librarian = { id = "org.parchmentmc.librarian.forgegradle", version.ref = "librarian" }
+vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "vanillaGradle" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+
+[bundles]
+prometheus = [
+    "prometheus-core", "prometheus-server", "prometheus-hotspot",
+    "prometheus-tracerCommon", "prometheus-tracerOtel", "prometheus-tracerOtelAgent"
+]
+
+common = ["cct-forge", "forgeConfig", "nightConfig-core", "nightConfig-toml"]
+fabric = ["fabric-loader", "fabric-api", "cct-fabric", "forgeConfig", "nightConfig-core", "nightConfig-toml"]
+forge = ["cct-forge"]

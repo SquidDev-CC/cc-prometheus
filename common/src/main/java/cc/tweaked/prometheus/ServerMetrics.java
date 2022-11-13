@@ -1,6 +1,9 @@
 package cc.tweaked.prometheus;
 
-import cc.tweaked.prometheus.collectors.*;
+import cc.tweaked.prometheus.collectors.ComputerCollector;
+import cc.tweaked.prometheus.collectors.ComputerFieldCollector;
+import cc.tweaked.prometheus.collectors.ThreadGroupCollector;
+import cc.tweaked.prometheus.collectors.VanillaCollector;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.HTTPServer;
 import io.prometheus.client.hotspot.DefaultExports;
@@ -21,7 +24,7 @@ public final class ServerMetrics {
     private ServerMetrics() {
     }
 
-    public static void onServerStart(MinecraftServer server, Config config) {
+    public static void onServerStart(MinecraftServer server) {
         var collectorRegistry = new CollectorRegistry(true);
         var ticking = ServerMetrics.toTick = new ArrayList<>();
         var registry = new MetricContext(server, collectorRegistry, ticking::add);
@@ -29,18 +32,18 @@ public final class ServerMetrics {
         ComputerCollector.register(registry);
         ComputerFieldCollector.register(registry);
         ThreadGroupCollector.register(registry);
-        if (config.vanilla()) VanillaCollector.export(registry);
-        if (config.jvm()) DefaultExports.register(collectorRegistry);
+        if (Config.vanilla.get()) VanillaCollector.export(registry);
+        if (Config.jvm.get()) DefaultExports.register(collectorRegistry);
 
         try {
             ServerMetrics.server = new HTTPServer.Builder()
-                .withHostname(config.host())
-                .withPort(config.port())
+                .withHostname(Config.host.get())
+                .withPort(Config.port.get())
                 .withDaemonThreads(true)
                 .withRegistry(collectorRegistry)
                 .build();
 
-            LOG.info("Serving Prometheus metrics on http://{}:{}", config.host(), config.port());
+            LOG.info("Serving Prometheus metrics on http://{}:{}", Config.host.get(), Config.port.get());
         } catch (IOException e) {
             LOG.error("Failed to start HTTP server", e);
             ServerMetrics.server = null;

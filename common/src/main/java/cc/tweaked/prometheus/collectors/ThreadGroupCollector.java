@@ -1,7 +1,7 @@
 package cc.tweaked.prometheus.collectors;
 
 import cc.tweaked.prometheus.MetricContext;
-import dan200.computercraft.shared.util.ThreadUtils;
+import dan200.computercraft.core.util.ThreadUtils;
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 

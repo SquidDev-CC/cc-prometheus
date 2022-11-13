@@ -1,8 +1,8 @@
 package cc.tweaked.prometheus.collectors;
 
 import cc.tweaked.prometheus.MetricContext;
-import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.shared.computer.core.ServerComputerRegistry;
+import dan200.computercraft.shared.computer.core.ServerContext;
 import io.prometheus.client.Gauge;
 
 import static cc.tweaked.prometheus.Constants.NAMESPACE;
@@ -26,7 +26,7 @@ public class ComputerCollector {
 
         context.onTick(() -> {
             int total = 0, on = 0;
-            for (var computer : ComputerCraft.serverComputerRegistry.getComputers()) {
+            for (var computer : ServerContext.get(context.server()).registry().getComputers()) {
                 total++;
                 if (computer.isOn()) on++;
             }

@@ -1,79 +1,77 @@
 package cc.tweaked.prometheus.collectors;
 
 import cc.tweaked.prometheus.MetricContext;
-import dan200.computercraft.core.computer.Computer;
-import dan200.computercraft.core.tracking.Tracker;
-import dan200.computercraft.core.tracking.Tracking;
-import dan200.computercraft.core.tracking.TrackingField;
-import io.prometheus.client.CollectorRegistry;
-import io.prometheus.client.Histogram;
-import io.prometheus.client.SimpleCollector;
-import io.prometheus.client.Summary;
-import net.minecraft.locale.Language;
+import dan200.computercraft.core.metrics.Metric;
+import dan200.computercraft.core.metrics.Metrics;
+import dan200.computercraft.shared.computer.core.ServerComputer;
+import dan200.computercraft.shared.computer.core.ServerContext;
+import dan200.computercraft.shared.computer.metrics.ComputerMetricsObserver;
+import dan200.computercraft.shared.computer.metrics.basic.Aggregate;
+import dan200.computercraft.shared.computer.metrics.basic.AggregatedMetric;
+import io.prometheus.client.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 
 import static cc.tweaked.prometheus.Constants.NAMESPACE;
 
 /**
- * Reports the values for all {@link TrackingField}s.
+ * Reports the values for all {@link Metrics}s.
  */
-public class ComputerFieldCollector implements Tracker {
-    private static final Set<TrackingField> SKIP = Set.of(
-        TrackingField.TASKS, TrackingField.AVERAGE_TIME, TrackingField.MAX_TIME, TrackingField.TOTAL_TIME,
-        TrackingField.SERVER_TIME, TrackingField.SERVER_COUNT
-    );
-
-    private final Map<TrackingField, Summary> summaries = new HashMap<>();
-    private final Histogram taskTime;
+public class ComputerFieldCollector implements ComputerMetricsObserver {
+    private final Map<Metric.Counter, Counter> counters = new HashMap<>();
+    private final Map<Metric.Event, Summary> summaries = new HashMap<>();
+    private final Histogram computerTime;
     private final Histogram serverTime;
 
     private ComputerFieldCollector(CollectorRegistry registry) {
-        for (var field : TrackingField.fields().values()) {
-            if (SKIP.contains(field)) continue;
+        for (var field : Metric.metrics().values()) {
+            if (field == Metrics.COMPUTER_TASKS || field == Metrics.SERVER_TASKS) continue;
 
-            summaries.put(field, buildField(field, Summary.build()).register(registry));
+            if (field instanceof Metric.Counter counter) {
+                counters.put(counter, buildField(field, Counter.build()).register(registry));
+            } else if (field instanceof Metric.Event event) {
+                summaries.put(event, buildField(field, Summary.build()).register(registry));
+            }
         }
 
-        taskTime = buildField(TrackingField.TASKS, Histogram.build()).name("task_time")
+        computerTime = buildField(Metrics.COMPUTER_TASKS, Histogram.build()).name("task_time")
             .unit("s")
             .register(registry);
 
-        serverTime = buildField(TrackingField.SERVER_TIME, Histogram.build())
+        serverTime = buildField(Metrics.SERVER_TASKS, Histogram.build())
             .unit("s")
             .buckets(0.0005, 0.001, 0.005, 0.01, 0.025, 0.05, 0.10, 0.25)
             .register(registry);
-
-        Tracking.add(this);
     }
 
     public static void register(MetricContext context) {
-        new ComputerFieldCollector(context.registry());
+        ServerContext.get(context.server()).metrics().addObserver(new ComputerFieldCollector(context.registry()));
     }
 
     @Override
-    public void addTaskTiming(Computer computer, long time) {
-        taskTime.labels(Integer.toString(computer.getID())).observe(time * 1e-9);
+    public void observe(ServerComputer computer, Metric.Counter counter) {
+        counters.get(counter).labels(Integer.toString(computer.getID())).inc();
     }
 
     @Override
-    public void addServerTiming(Computer computer, long time) {
-        serverTime.labels(Integer.toString(computer.getID())).observe(time * 1e-9);
-    }
-
-    @Override
-    public void addValue(Computer computer, TrackingField field, long count) {
-        summaries.get(field).labels(Integer.toString(computer.getID())).observe(count);
+    public void observe(ServerComputer computer, Metric.Event event, long value) {
+        if (event == Metrics.SERVER_TASKS) {
+            serverTime.labels(Integer.toString(computer.getID())).observe(value);
+        } else if (event == Metrics.COMPUTER_TASKS) {
+            computerTime.labels(Integer.toString(computer.getID())).observe(value);
+        } else {
+            summaries.get(event).labels(Integer.toString(computer.getID())).observe(value);
+        }
     }
 
     @SuppressWarnings("unchecked")
-    private static <B extends SimpleCollector.Builder<?, ?>> B buildField(TrackingField field, B builder) {
+    private static <B extends SimpleCollector.Builder<?, ?>> B buildField(Metric field, B builder) {
         return (B) builder
             .namespace(NAMESPACE)
-            .name(field.id())
-            .help(Language.getInstance().getOrDefault(field.translationKey()))
+            .name(field.name())
+            .help(Objects.toString(new AggregatedMetric(field, Aggregate.NONE).displayName()))
             .labelNames("computer_id");
     }
 }

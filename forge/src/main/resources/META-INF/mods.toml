@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[43,)"
 
 issueTrackerURL="https://github.com/cc-tweaked/cc-prometheus/issues"
 
@@ -19,13 +19,13 @@ Hosts a Prometheus server with various ComputerCraft related statistics
 [[dependencies.ccprometheus]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18,1.19)"
+    versionRange="[1.19,1.20)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.ccprometheus]]
     modId="computercraft"
     mandatory=true
-    versionRange="[1.100.4,)"
+    versionRange="[1.102.0,)"
     ordering="NONE"
     side="BOTH"
