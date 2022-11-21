@@ -29,7 +29,15 @@ public final class ServerMetrics {
         var ticking = ServerMetrics.toTick = new ArrayList<>();
         var registry = new MetricContext(server, collectorRegistry, ticking::add);
 
-        if (Config.computercraft.get()) {
+        var computercraftLoaded = false;
+        try {
+            Class.forName("dan200.computercraft.impl.ComputerCraftAPIImpl");
+            computercraftLoaded = true;
+        } catch (ClassNotFoundException ignored) {
+            LOG.warn("ComputerCraft not found, not registering ComputerCraft metrics");
+        }
+
+        if (computercraftLoaded) {
             ComputerCollector.register(registry);
             ComputerFieldCollector.register(registry);
             ThreadGroupCollector.register(registry);

@@ -5,7 +5,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public final class Config {
     public static final ForgeConfigSpec.ConfigValue<String> host;
     public static final ForgeConfigSpec.ConfigValue<Integer> port;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> computercraft;
     public static final ForgeConfigSpec.ConfigValue<Boolean> vanilla;
     public static final ForgeConfigSpec.ConfigValue<Boolean> jvm;
 
@@ -21,11 +20,6 @@ public final class Config {
         port = configBuilder
             .comment("The port the Prometheus exporter should be hosted on.")
             .defineInRange("port", 9226, 1, 65535);
-
-        computercraft = configBuilder
-            .comment("Whether to expose ComputerCraft metrics.")
-            .worldRestart()
-            .define("computercraft", true);
 
         vanilla = configBuilder
             .comment("Whether to expose some metrics about the state of the vanilla server.")
