@@ -44,7 +44,9 @@ dependencies {
 
     compileOnly(project(":common"))
 
+    // Core libraries
     minecraftEmbed(libs.bundles.prometheus)
+    // Extra mods
     implementation(fg.deobf(libs.cct.forge.get()))
 }
 

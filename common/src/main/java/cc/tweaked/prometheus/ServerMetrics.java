@@ -29,11 +29,18 @@ public final class ServerMetrics {
         var ticking = ServerMetrics.toTick = new ArrayList<>();
         var registry = new MetricContext(server, collectorRegistry, ticking::add);
 
-        ComputerCollector.register(registry);
-        ComputerFieldCollector.register(registry);
-        ThreadGroupCollector.register(registry);
+        if (classExists("dan200.computercraft.api.ComputerCraftAPI")) {
+            ComputerCollector.register(registry);
+            ComputerFieldCollector.register(registry);
+            ThreadGroupCollector.register(registry);
+        }
+
         if (Config.vanilla.get()) VanillaCollector.export(registry);
         if (Config.jvm.get()) DefaultExports.register(collectorRegistry);
+
+        if (!collectorRegistry.metricFamilySamples().hasMoreElements()) {
+            LOG.warn("Warning: no collectors are enabled! Check the configuration.");
+        }
 
         try {
             ServerMetrics.server = new HTTPServer.Builder()
@@ -60,5 +67,14 @@ public final class ServerMetrics {
 
     public static void onServerTick() {
         for (var action : toTick) action.run();
+    }
+
+    private static boolean classExists(String name) {
+        try {
+            Class.forName(name, false, ServerMetrics.class.getClassLoader());
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
     }
 }

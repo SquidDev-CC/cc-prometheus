@@ -12,6 +12,10 @@ minecraft {
 
 dependencies {
     compileOnlyApi(libs.jsr305)
+
+    // Core libraries
     implementation(libs.bundles.prometheus)
-    compileOnly(libs.bundles.common)
+    compileOnly(libs.bundles.forgeConfig)
+    // Extra mods
+    compileOnly(libs.cct.forge) // We don't ship a common mod jar.
 }

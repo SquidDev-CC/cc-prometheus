@@ -25,7 +25,7 @@ Hosts a Prometheus server with various ComputerCraft related statistics
 
 [[dependencies.ccprometheus]]
     modId="computercraft"
-    mandatory=true
+    mandatory=false
     versionRange="[1.102.0,)"
     ordering="NONE"
     side="BOTH"
