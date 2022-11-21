@@ -31,7 +31,7 @@ public final class ServerMetrics {
 
         var computercraftLoaded = false;
         try {
-            Class.forName("dan200.computercraft.impl.ComputerCraftAPIImpl");
+            Class.forName("dan200.computercraft.api.ComputerCraftAPI");
             computercraftLoaded = true;
         } catch (ClassNotFoundException ignored) {
             LOG.warn("ComputerCraft not found, not registering ComputerCraft metrics");
