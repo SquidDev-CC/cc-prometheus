@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.shadow)
     alias(libs.plugins.forgeGradle)
     alias(libs.plugins.librarian)
+    alias(libs.plugins.mixinGradle)
     id("java-convention")
 }
 
@@ -57,6 +58,11 @@ tasks.processResources { from(project(":common").sourceSets.main.get().resources
 tasks.jar {
     finalizedBy("reobfJar")
     archiveClassifier.set("slim")
+}
+
+mixin {
+    add(sourceSets.main.get(), "ccprometheus.mixins.refmap.json")
+    config("ccprometheus.mixins.json")
 }
 
 reobf {

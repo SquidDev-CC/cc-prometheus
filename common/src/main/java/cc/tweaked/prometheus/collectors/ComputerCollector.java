@@ -5,7 +5,7 @@ import dan200.computercraft.shared.computer.core.ServerComputerRegistry;
 import dan200.computercraft.shared.computer.core.ServerContext;
 import io.prometheus.client.Gauge;
 
-import static cc.tweaked.prometheus.Constants.NAMESPACE;
+import static cc.tweaked.prometheus.Constants.COMPUTERCRAFT_NAMESPACE;
 
 /**
  * Counts the number of computers registered in the {@link ServerComputerRegistry}.
@@ -13,13 +13,13 @@ import static cc.tweaked.prometheus.Constants.NAMESPACE;
 public class ComputerCollector {
     public static void register(MetricContext context) {
         var totalComputers = Gauge.build()
-            .namespace(NAMESPACE)
+            .namespace(COMPUTERCRAFT_NAMESPACE)
             .name("computers_total")
             .help("Total number of loaded computers")
             .register(context.registry());
 
         var onComputers = Gauge.build()
-            .namespace(NAMESPACE)
+            .namespace(COMPUTERCRAFT_NAMESPACE)
             .name("computers_on")
             .help("Total number of computers which are running")
             .register(context.registry());

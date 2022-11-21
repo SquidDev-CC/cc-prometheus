@@ -7,6 +7,7 @@ fabric-loader = "0.14.10"
 forge = "43.1.1"
 parchment = "2022.10.16"
 parchmentMc = "1.19.2"
+mixin = "0.8.5"
 
 # Normal dependencies
 jsr305 = "3.0.2"
@@ -23,6 +24,7 @@ forgeGradle = "5.1.+"
 librarian = "1.+"
 vanillaGradle = "0.2.1-SNAPSHOT"
 shadow = "7.1.2"
+mixinGradle = "0.7.+"
 
 [libraries]
 # Normal dependencies
@@ -40,18 +42,20 @@ prometheus-tracerOtel = { module = "io.prometheus:simpleclient_tracer_otel", ver
 prometheus-tracerOtelAgent = { module = "io.prometheus:simpleclient_tracer_otel_agent", version.ref = "prometheus" }
 
 # Minecraft mods
+cct-fabric = { module = "cc.tweaked:cc-tweaked-1.19.2-fabric", version.ref = "cct" }
+cct-forge = { module = "cc.tweaked:cc-tweaked-1.19.2-forge", version.ref = "cct" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
 forgeConfig = { module = "net.minecraftforge:forgeconfigapiport-fabric", version.ref = "forgeConfig" }
-cct-forge = { module = "cc.tweaked:cc-tweaked-1.19.2-forge", version.ref = "cct" }
-cct-fabric = { module = "cc.tweaked:cc-tweaked-1.19.2-fabric", version.ref = "cct" }
+mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 
 [plugins]
-forgeGradle = { id = "net.minecraftforge.gradle", version.ref = "forgeGradle" }
 fabric-loom = { id = "fabric-loom", version.ref = "fabric-loom" }
+forgeGradle = { id = "net.minecraftforge.gradle", version.ref = "forgeGradle" }
 librarian = { id = "org.parchmentmc.librarian.forgegradle", version.ref = "librarian" }
-vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "vanillaGradle" }
+mixinGradle = { id = "org.spongepowered.mixin", version.ref = "mixinGradle" }
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "vanillaGradle" }
 
 [bundles]
 prometheus = [

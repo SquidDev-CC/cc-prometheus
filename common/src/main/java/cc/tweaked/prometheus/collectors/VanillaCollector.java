@@ -24,6 +24,13 @@ public class VanillaCollector {
             .help("The average tick time as defined by the MC server")
             .register(context.registry());
 
+        var dimensionTickTime = Histogram.build()
+            .namespace(NAMESPACE).name("tick_time").unit("s")
+            .buckets(0.005, 0.01, 0.025, 0.05, 0.10, 0.25, 0.5, 1.0)
+            .labelNames("dimension")
+            .help("The average tick time for each dimension")
+            .register(context.registry());
+
         var playerCount = Gauge.build()
             .namespace(NAMESPACE).name("players").unit("count")
             .help("The number of players in each dimension.")
@@ -49,10 +56,30 @@ public class VanillaCollector {
             }
 
             totalPlayerCount.set(server.getPlayerCount());
-
-            // TODO: This doesn't include the time to run Forge/Fabric hooks! Not sure how to handle that in a generic way.
-            averageTickTime.set(server.getAverageTickTime() * 1e-3); // ms to s
-            tickTime.observe(server.tickTimes[server.getTickCount() % 100] * 1e-9); // ns to s.
         });
+
+        ((MinecraftServerTimings) server).prometheus$setTimingObserver((time, averageTime) -> {
+            averageTickTime.set(averageTime * 1e-3); // ms to s
+            tickTime.observe(time * 1e-9); // ns to s.
+        });
+    }
+
+    public interface MinecraftServerTimings {
+        /**
+         * Set the object which monitors this server's timings.
+         *
+         * @param observer The timings observer.
+         */
+        void prometheus$setTimingObserver(TimingObserver observer);
+    }
+
+    public interface TimingObserver {
+        /**
+         * Called when a server finishes its tick.
+         *
+         * @param tickTime    The time taken for the last tick measured in nanoseconds.
+         * @param averageTime A smoothed version of tick times, measured in milliseconds.
+         */
+        void onServerTick(long tickTime, float averageTime);
     }
 }

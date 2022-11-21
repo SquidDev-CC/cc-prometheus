@@ -8,13 +8,13 @@ import io.prometheus.client.GaugeMetricFamily;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cc.tweaked.prometheus.Constants.NAMESPACE;
+import static cc.tweaked.prometheus.Constants.COMPUTERCRAFT_NAMESPACE;
 
 /**
  * Counts the number of threads active in each of CC:T's thread groups.
  */
 public class ThreadGroupCollector extends Collector implements Collector.Describable {
-    private static final String FULL_NAME = NAMESPACE + "_thread_count";
+    private static final String FULL_NAME = COMPUTERCRAFT_NAMESPACE + "_thread_count";
     private static final String HELP = "Number of currently live threads";
     private static final List<String> LABEL_NAMES = List.of("group");
 

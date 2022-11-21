@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static cc.tweaked.prometheus.Constants.NAMESPACE;
+import static cc.tweaked.prometheus.Constants.COMPUTERCRAFT_NAMESPACE;
 
 /**
  * Reports the values for all {@link Metrics}s.
@@ -69,7 +69,7 @@ public class ComputerFieldCollector implements ComputerMetricsObserver {
     @SuppressWarnings("unchecked")
     private static <B extends SimpleCollector.Builder<?, ?>> B buildField(Metric field, B builder) {
         return (B) builder
-            .namespace(NAMESPACE)
+            .namespace(COMPUTERCRAFT_NAMESPACE)
             .name(field.name())
             .help(Objects.toString(new AggregatedMetric(field, Aggregate.NONE).displayName()))
             .labelNames("computer_id");

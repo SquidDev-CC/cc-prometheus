@@ -12,6 +12,7 @@ minecraft {
 
 dependencies {
     compileOnlyApi(libs.jsr305)
+    compileOnly(libs.mixin)
 
     // Core libraries
     implementation(libs.bundles.prometheus)

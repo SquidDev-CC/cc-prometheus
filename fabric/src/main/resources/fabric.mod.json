@@ -26,5 +26,8 @@
     },
     "recommends": {
         "computercraft": "*"
-    }
+    },
+    "mixins": [
+        "ccprometheus.mixins.json"
+    ]
 }
