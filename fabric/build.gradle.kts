@@ -28,7 +28,7 @@ dependencies {
     implementation(libs.bundles.prometheus)
     modImplementation(libs.bundles.forgeConfig)
     // Extra mods
-    modCompileOnly(libs.cct.fabric)
+    modImplementation(libs.cct.fabric)
 
     include(libs.bundles.prometheus)
     include(libs.bundles.forgeConfig)
