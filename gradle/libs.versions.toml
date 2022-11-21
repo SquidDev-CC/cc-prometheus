@@ -58,7 +58,4 @@ prometheus = [
     "prometheus-core", "prometheus-common", "prometheus-server", "prometheus-hotspot",
     "prometheus-tracerCommon", "prometheus-tracerOtel", "prometheus-tracerOtelAgent"
 ]
-
-common = ["cct-forge", "forgeConfig", "nightConfig-core", "nightConfig-toml"]
-fabric = ["fabric-loader", "fabric-api", "cct-fabric", "forgeConfig", "nightConfig-core", "nightConfig-toml"]
-forge = ["cct-forge"]
+forgeConfig = ["forgeConfig", "nightConfig-core", "nightConfig-toml"]

@@ -24,14 +24,17 @@ public final class Config {
 
         computercraft = configBuilder
             .comment("Whether to expose ComputerCraft metrics.")
+            .worldRestart()
             .define("computercraft", true);
 
         vanilla = configBuilder
             .comment("Whether to expose some metrics about the state of the vanilla server.")
+            .worldRestart()
             .define("vanilla", false);
 
         jvm = configBuilder
             .comment("Whether to expose some metrics about the state of the Java runtime.")
+            .worldRestart()
             .define("jvm", false);
 
         spec = configBuilder.build();

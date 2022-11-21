@@ -22,22 +22,18 @@ dependencies {
         },
     )
 
-    modImplementation(libs.bundles.fabric)
+    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.api)
+    // Core libraries
     implementation(libs.bundles.prometheus)
+    modImplementation(libs.bundles.forgeConfig)
+    // Extra mods
+    modCompileOnly(libs.cct.fabric)
+
     include(libs.bundles.prometheus)
+    include(libs.bundles.forgeConfig)
 
     implementation(project(":common"))
-
-//     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-//
-//     implementation project(":common")
-//
-//     modImplementation ("cc.tweaked:cc-tweaked-${minecraft_version}-fabric:${cct_version}")
-//
-//     // IDK how Fabric config works (so much seems to be client-only??), so just copy CC:R.
-//     implementation 'com.electronwill.night-config:toml:3.6.5'
-//     include 'com.electronwill.night-config:core:3.6.5'
-//     include 'com.electronwill.night-config:toml:3.6.5'
 }
 
 loom {
