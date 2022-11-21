@@ -22,7 +22,9 @@
         "fabricloader": ">=0.14",
         "fabric": "*",
         "minecraft": "1.19.x",
-        "java": ">=17",
+        "java": ">=17"
+    },
+    "recommends": {
         "computercraft": "*"
     }
 }

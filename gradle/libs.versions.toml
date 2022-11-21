@@ -31,6 +31,7 @@ nightConfig-core = { module = "com.electronwill.night-config:core", version.ref 
 nightConfig-toml = { module = "com.electronwill.night-config:toml", version.ref = "nightConfig" }
 
 prometheus-core = { module = "io.prometheus:simpleclient", version.ref = "prometheus" }
+prometheus-common = { module = "io.prometheus:simpleclient_common", version.ref = "prometheus" }
 prometheus-server = { module = "io.prometheus:simpleclient_httpserver", version.ref = "prometheus" }
 prometheus-hotspot = { module = "io.prometheus:simpleclient_hotspot", version.ref = "prometheus" }
 # All the transitive deps of prometheus.
@@ -54,7 +55,7 @@ shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 
 [bundles]
 prometheus = [
-    "prometheus-core", "prometheus-server", "prometheus-hotspot",
+    "prometheus-core", "prometheus-common", "prometheus-server", "prometheus-hotspot",
     "prometheus-tracerCommon", "prometheus-tracerOtel", "prometheus-tracerOtelAgent"
 ]
 
