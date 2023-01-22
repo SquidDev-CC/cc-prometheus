@@ -24,13 +24,6 @@ public class VanillaCollector {
             .help("The average tick time as defined by the MC server")
             .register(context.registry());
 
-        var dimensionTickTime = Histogram.build()
-            .namespace(NAMESPACE).name("tick_time").unit("s")
-            .buckets(0.005, 0.01, 0.025, 0.05, 0.10, 0.25, 0.5, 1.0)
-            .labelNames("dimension")
-            .help("The average tick time for each dimension")
-            .register(context.registry());
-
         var playerCount = Gauge.build()
             .namespace(NAMESPACE).name("players").unit("count")
             .help("The number of players in each dimension.")
@@ -44,7 +37,7 @@ public class VanillaCollector {
 
         var chunksLoaded = Gauge.build()
             .namespace(NAMESPACE).name("chunks_loaded").unit("count")
-            .help("The number of players in each dimension.")
+            .help("The number of chunks loaded in each dimension.")
             .labelNames("dimension")
             .register(context.registry());
 

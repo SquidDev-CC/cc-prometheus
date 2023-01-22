@@ -35,7 +35,7 @@ repositories {
         content {
             includeGroup("org.squiddev")
             includeGroup("cc.tweaked")
-            includeModule("net.minecraftforge", "forgeconfigapiport-fabric")
+            includeGroup("fuzs.forgeconfigapiport")
         }
     }
 

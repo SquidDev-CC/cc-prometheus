@@ -26,12 +26,14 @@ dependencies {
     modImplementation(libs.fabric.api)
     // Core libraries
     implementation(libs.bundles.prometheus)
-    modImplementation(libs.bundles.forgeConfig)
+    implementation(libs.bundles.nightConfig)
+    modImplementation(libs.forgeConfig.fabric)
     // Extra mods
     modImplementation(libs.cct.fabric)
 
     include(libs.bundles.prometheus)
-    include(libs.bundles.forgeConfig)
+    include(libs.bundles.nightConfig)
+    include(libs.forgeConfig.fabric)
 
     implementation(project(":common"))
 }
