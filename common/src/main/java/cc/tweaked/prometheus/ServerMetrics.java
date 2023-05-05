@@ -24,7 +24,7 @@ public final class ServerMetrics {
     private ServerMetrics() {
     }
 
-    public static void onServerStart(MinecraftServer server) {
+    public static void onServerStart(MinecraftServer server, Config config) {
         var collectorRegistry = new CollectorRegistry(true);
         var ticking = ServerMetrics.toTick = new ArrayList<>();
         var registry = new MetricContext(server, collectorRegistry, ticking::add);
@@ -35,8 +35,8 @@ public final class ServerMetrics {
             ThreadGroupCollector.register(registry);
         }
 
-        if (Config.vanilla.get()) VanillaCollector.export(registry);
-        if (Config.jvm.get()) DefaultExports.register(collectorRegistry);
+        if (config.vanilla()) VanillaCollector.export(registry);
+        if (config.jvm()) DefaultExports.register(collectorRegistry);
 
         if (!collectorRegistry.metricFamilySamples().hasMoreElements()) {
             LOG.warn("Warning: no collectors are enabled! Check the configuration.");
@@ -44,13 +44,13 @@ public final class ServerMetrics {
 
         try {
             ServerMetrics.server = new HTTPServer.Builder()
-                .withHostname(Config.host.get())
-                .withPort(Config.port.get())
+                .withHostname(config.host())
+                .withPort(config.port())
                 .withDaemonThreads(true)
                 .withRegistry(collectorRegistry)
                 .build();
 
-            LOG.info("Serving Prometheus metrics on http://{}:{}", Config.host.get(), Config.port.get());
+            LOG.info("Serving Prometheus metrics on http://{}:{}", config.host(), config.port());
         } catch (IOException e) {
             LOG.error("Failed to start HTTP server", e);
             ServerMetrics.server = null;

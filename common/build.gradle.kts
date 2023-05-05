@@ -17,7 +17,6 @@ dependencies {
     // Core libraries
     implementation(libs.bundles.prometheus)
     implementation(libs.bundles.nightConfig)
-    compileOnly(libs.forgeConfig.common)
     // Extra mods
     compileOnly(libs.cct.forge) // There's no common mod jar, so use the Forge one.
 }

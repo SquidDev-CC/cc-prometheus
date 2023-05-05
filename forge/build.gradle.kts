@@ -46,7 +46,9 @@ dependencies {
     compileOnly(project(":common"))
 
     // Core libraries
-    minecraftEmbed(libs.bundles.prometheus)
+    minecraftEmbed(libs.bundles.prometheus) {
+        jarJar.ranged(this, "[0.16.0,0.17.0]")
+    }
     // Extra mods
     implementation(fg.deobf(libs.cct.forge.get()))
 }

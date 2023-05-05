@@ -35,7 +35,6 @@ repositories {
         content {
             includeGroup("org.squiddev")
             includeGroup("cc.tweaked")
-            includeGroup("fuzs.forgeconfigapiport")
         }
     }
 
