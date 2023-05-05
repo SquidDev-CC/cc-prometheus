@@ -58,9 +58,9 @@ public class ComputerFieldCollector implements ComputerMetricsObserver {
     @Override
     public void observe(ServerComputer computer, Metric.Event event, long value) {
         if (event == Metrics.SERVER_TASKS) {
-            serverTime.labels(Integer.toString(computer.getID())).observe(value);
+            serverTime.labels(Integer.toString(computer.getID())).observe(value * 1e-9);
         } else if (event == Metrics.COMPUTER_TASKS) {
-            computerTime.labels(Integer.toString(computer.getID())).observe(value);
+            computerTime.labels(Integer.toString(computer.getID())).observe(value * 1e-9);
         } else {
             summaries.get(event).labels(Integer.toString(computer.getID())).observe(value);
         }
