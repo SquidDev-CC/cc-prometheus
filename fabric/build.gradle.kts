@@ -37,6 +37,8 @@ dependencies {
 }
 
 loom {
+    mixin.defaultRefmapName.set("ccprometheus.refmap.json")
+
     runs {
         configureEach {
             ideConfigGenerated(true)
