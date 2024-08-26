@@ -5,6 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
@@ -48,7 +49,7 @@ public class FabricMod implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
 
         // Need to run after CC has started.
-        var phase = new ResourceLocation(Constants.MOD_ID, "after_cc");
+        var phase = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "after_cc");
         ServerLifecycleEvents.SERVER_STARTED.addPhaseOrdering(Event.DEFAULT_PHASE, phase);
         ServerLifecycleEvents.SERVER_STARTED.register(phase, server -> ServerMetrics.onServerStart(server, config));
 
@@ -57,7 +58,7 @@ public class FabricMod implements ModInitializer {
     }
 
     private void onServerStarting(MinecraftServer server) {
-        var configPath = server.getWorldPath(configDir).resolve(configName);
+        var configPath = FabricLoader.getInstance().getConfigDir().resolve(configName);
         var configBuilder = CommentedFileConfig.builder(configPath)
             .onFileNotFound((path, format) -> {
                 Files.createDirectories(path.getParent());

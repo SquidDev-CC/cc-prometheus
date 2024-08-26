@@ -11,7 +11,7 @@ version = modVersion
 base.archivesName.convention("cc-prometheus-$mcVersion-${project.name}")
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     withSourcesJar()
 }
 
@@ -31,17 +31,9 @@ tasks.jar {
 repositories {
     mavenCentral()
 
-    maven("https://squiddev.cc/maven") {
+    maven("https://maven.squiddev.cc") {
         content {
-            includeGroup("org.squiddev")
             includeGroup("cc.tweaked")
-        }
-    }
-
-    maven("https://maven.parchmentmc.org/") {
-        name = "Parchment"
-        content {
-            includeGroup("org.parchmentmc.data")
         }
     }
 }

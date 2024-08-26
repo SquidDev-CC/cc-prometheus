@@ -1,13 +1,27 @@
 plugins {
     `java-library`
     id("java-convention")
-    alias(libs.plugins.vanillaGradle)
+    alias(libs.plugins.vanillaExtract)
 }
 
 val mcVersion: String by extra
 
 minecraft {
     version(mcVersion)
+
+    mappings {
+        parchment(libs.versions.parchmentMc.get().toString(), libs.versions.parchment.get().toString())
+    }
+
+    unpick(libs.yarn)
+}
+
+repositories {
+    maven("https://maven.neoforged.net/") {
+        content {
+            includeModule("org.spongepowered", "mixin")
+        }
+    }
 }
 
 dependencies {
@@ -18,5 +32,6 @@ dependencies {
     implementation(libs.bundles.prometheus)
     implementation(libs.bundles.nightConfig)
     // Extra mods
-    compileOnly(libs.cct.forge) // There's no common mod jar, so use the Forge one.
+    compileOnly(libs.cct.core) // This feels like a bug! It should be a transitive dep of common.
+    compileOnly(libs.cct.common)
 }

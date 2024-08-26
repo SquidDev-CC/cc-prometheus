@@ -19,10 +19,10 @@
         ]
     },
     "depends": {
-        "fabricloader": ">=0.14",
+        "fabricloader": ">=0.15",
         "fabric": "*",
-        "minecraft": "1.19.x",
-        "java": ">=17"
+        "minecraft": "1.21.1",
+        "java": ">=21"
     },
     "recommends": {
         "computercraft": "*"

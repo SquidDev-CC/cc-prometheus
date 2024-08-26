@@ -8,6 +8,5 @@
     },
     "mixins": [
         "MinecraftServerMixin"
-    ],
-    "refmap": "ccprometheus.refmap.json"
+    ]
 }

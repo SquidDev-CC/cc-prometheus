@@ -1,20 +1,19 @@
 package cc.tweaked.prometheus;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @Mod(Constants.MOD_ID)
 public class ForgeMod {
     public ForgeMod() {
-        // Define our config
-        var configBuilder = new ForgeConfigSpec.Builder();
+        var configBuilder = new ModConfigSpec.Builder();
 
         var host = configBuilder
             .comment(Config.HOST_HELP)
@@ -32,14 +31,11 @@ public class ForgeMod {
             .comment(Config.JVM_HELP)
             .define("jvm", Config.JVM_DEFAULT);
 
-        var config = configBuilder.build();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, config);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER, configBuilder.build());
 
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, (ServerStartedEvent event) ->
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, (ServerStartedEvent event) ->
             ServerMetrics.onServerStart(event.getServer(), new Config(host.get(), port.get(), vanilla.get(), jvm.get())));
-        MinecraftForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> ServerMetrics.onServerStop());
-        MinecraftForge.EVENT_BUS.addListener((TickEvent.ServerTickEvent event) -> {
-            if (event.phase == TickEvent.Phase.END) ServerMetrics.onServerTick();
-        });
+        NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> ServerMetrics.onServerStop());
+        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> ServerMetrics.onServerTick());
     }
 }

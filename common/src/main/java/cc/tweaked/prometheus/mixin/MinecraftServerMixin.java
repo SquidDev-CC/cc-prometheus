@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * {@link MinecraftServer#tickTimes}} (and the derived calculations) do not include main-thread tick tasks (those queued
+ * {@link MinecraftServer#getTickTimesNanos()}} (and the derived calculations) do not include main-thread tick tasks (those queued
  * by {@link MinecraftServer#tell(Runnable)}) or from Fabric/Forge's tick events. We use our own mixins to more
  * accurately capture this information.
  */
